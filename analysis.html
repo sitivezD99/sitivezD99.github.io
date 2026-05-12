@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Building an Early-Warning System for Student Retention – Ignacio Bonmati Gonzalvez</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Ignacio Bonmati Gonzalvez</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./analysis.html" aria-current="page"> 
+<span class="menu-text">Early Warning System Analysis</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./Resume.pdf"> 
+<span class="menu-text">Resume</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Cover_Letter.pdf"> 
+<span class="menu-text">Cover Letter</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1. Introduction</a></li>
+  <li><a href="#justifying-the-early-intervention-architecture" id="toc-justifying-the-early-intervention-architecture" class="nav-link" data-scroll-target="#justifying-the-early-intervention-architecture">2. Justifying the Early Intervention Architecture</a></li>
+  <li><a href="#data-engineering-building-the-december-deployment-pipeline" id="toc-data-engineering-building-the-december-deployment-pipeline" class="nav-link" data-scroll-target="#data-engineering-building-the-december-deployment-pipeline">3. Data Engineering: Building the December Deployment Pipeline</a></li>
+  <li><a href="#exploratory-data-analysis-isolating-the-historical-truth" id="toc-exploratory-data-analysis-isolating-the-historical-truth" class="nav-link" data-scroll-target="#exploratory-data-analysis-isolating-the-historical-truth">4. Exploratory Data Analysis: Isolating the Historical Truth</a>
+  <ul class="collapse">
+  <li><a href="#target-imbalance-and-metric-selection" id="toc-target-imbalance-and-metric-selection" class="nav-link" data-scroll-target="#target-imbalance-and-metric-selection">4.1 Target Imbalance and Metric Selection</a></li>
+  <li><a href="#systematic-outlier-handling" id="toc-systematic-outlier-handling" class="nav-link" data-scroll-target="#systematic-outlier-handling">4.2 Systematic Outlier Handling</a></li>
+  <li><a href="#feature-target-correlation-collinearity" id="toc-feature-target-correlation-collinearity" class="nav-link" data-scroll-target="#feature-target-correlation-collinearity">4.3 Feature-Target Correlation &amp; Collinearity</a></li>
+  </ul></li>
+  <li><a href="#preprocessing-architecture-handling-collinearity-and-scaling" id="toc-preprocessing-architecture-handling-collinearity-and-scaling" class="nav-link" data-scroll-target="#preprocessing-architecture-handling-collinearity-and-scaling">5. Preprocessing Architecture: Handling Collinearity and Scaling</a></li>
+  <li><a href="#predictive-modeling-hyperparameter-tuning" id="toc-predictive-modeling-hyperparameter-tuning" class="nav-link" data-scroll-target="#predictive-modeling-hyperparameter-tuning">6. Predictive Modeling &amp; Hyperparameter Tuning</a></li>
+  <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation">7. Model Evaluation</a>
+  <ul class="collapse">
+  <li><a href="#final-model-selection-and-feature-impact" id="toc-final-model-selection-and-feature-impact" class="nav-link" data-scroll-target="#final-model-selection-and-feature-impact">7.1 Final Model Selection and Feature Impact</a></li>
+  </ul></li>
+  <li><a href="#live-deployment-generating-the-intervention-list" id="toc-live-deployment-generating-the-intervention-list" class="nav-link" data-scroll-target="#live-deployment-generating-the-intervention-list">8. Live Deployment: Generating the Intervention List</a></li>
+  <li><a href="#strategic-recommendations-and-limitations" id="toc-strategic-recommendations-and-limitations" class="nav-link" data-scroll-target="#strategic-recommendations-and-limitations">9. Strategic Recommendations and Limitations</a>
+  <ul class="collapse">
+  <li><a href="#model-limitations" id="toc-model-limitations" class="nav-link" data-scroll-target="#model-limitations">Model Limitations</a></li>
+  <li><a href="#methodological-reflection" id="toc-methodological-reflection" class="nav-link" data-scroll-target="#methodological-reflection">Methodological Reflection</a></li>
+  <li><a href="#future-work" id="toc-future-work" class="nav-link" data-scroll-target="#future-work">Future Work</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Building an Early-Warning System for Student Retention</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
+<p>This dataset was originally compiled to identify higher education students at risk of dropping out so that support strategies could be deployed in advance.</p>
+<p>In its raw form, the target variable contains three classes: <code>Graduate</code>, <code>Dropout</code>, and <code>Enrolled</code>. <code>Enrolled</code> is not a final outcome; it is a transient state. An enrolled student today could graduate next year, or they could drop out tomorrow. Forcing a machine learning algorithm to find a static mathematical pattern for a temporary state would confuse the model and degrade performance.</p>
+<p>To translate this academic dataset into a practical Early Intervention System, I made two strategic architecture decisions: 1. <strong>Isolating the Historical Truth:</strong> I split the data to isolate students whose outcomes are permanently sealed (<code>Graduate</code> and <code>Dropout</code>). I will train a binary classification model exclusively on this historical cohort to capture the pure mathematical signal of student attrition. 2. <strong>Probability Scoring for Live Deployment:</strong> I will treat the <code>Enrolled</code> cohort as a live deployment set. Instead of predicting a hard “Yes/No”, the model will calculate a Dropout Risk Probability for every currently enrolled student.</p>
+<div id="950253bd" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import necessary libraries for data manipulation, visualization, and machine learning pipelines.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, Markdown</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split, GridSearchCV</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestClassifier, GradientBoostingClassifier</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> classification_report, ConfusionMatrixDisplay, balanced_accuracy_score, recall_score</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Suppress warnings to maintain a clean notebook output for the final report.</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a consistent, clean visual style for all upcoming plots.</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the student attrition dataset and verify its initial dimensions.</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data.csv'</span>, sep<span class="op">=</span><span class="st">';'</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw data preview.</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>display(df.head().style.set_caption(<span class="ss">f"ORIGINAL DATASET SHAPE: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> ROWS AND </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> COLUMNS"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_97ec4" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_97ec4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: ORIGINAL DATASET SHAPE: 4424 ROWS AND 37 COLUMNS
+</figcaption>
+<div aria-describedby="T_97ec4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_97ec4" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_97ec4_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Marital status</th>
+<th id="T_97ec4_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Application mode</th>
+<th id="T_97ec4_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Application order</th>
+<th id="T_97ec4_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Course</th>
+<th id="T_97ec4_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Daytime/evening attendance</th>
+<th id="T_97ec4_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">Previous qualification</th>
+<th id="T_97ec4_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Previous qualification (grade)</th>
+<th id="T_97ec4_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Nacionality</th>
+<th id="T_97ec4_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">Mother's qualification</th>
+<th id="T_97ec4_level0_col9" class="col_heading level0 col9" data-quarto-table-cell-role="th">Father's qualification</th>
+<th id="T_97ec4_level0_col10" class="col_heading level0 col10" data-quarto-table-cell-role="th">Mother's occupation</th>
+<th id="T_97ec4_level0_col11" class="col_heading level0 col11" data-quarto-table-cell-role="th">Father's occupation</th>
+<th id="T_97ec4_level0_col12" class="col_heading level0 col12" data-quarto-table-cell-role="th">Admission grade</th>
+<th id="T_97ec4_level0_col13" class="col_heading level0 col13" data-quarto-table-cell-role="th">Displaced</th>
+<th id="T_97ec4_level0_col14" class="col_heading level0 col14" data-quarto-table-cell-role="th">Educational special needs</th>
+<th id="T_97ec4_level0_col15" class="col_heading level0 col15" data-quarto-table-cell-role="th">Debtor</th>
+<th id="T_97ec4_level0_col16" class="col_heading level0 col16" data-quarto-table-cell-role="th">Tuition fees up to date</th>
+<th id="T_97ec4_level0_col17" class="col_heading level0 col17" data-quarto-table-cell-role="th">Gender</th>
+<th id="T_97ec4_level0_col18" class="col_heading level0 col18" data-quarto-table-cell-role="th">Scholarship holder</th>
+<th id="T_97ec4_level0_col19" class="col_heading level0 col19" data-quarto-table-cell-role="th">Age at enrollment</th>
+<th id="T_97ec4_level0_col20" class="col_heading level0 col20" data-quarto-table-cell-role="th">International</th>
+<th id="T_97ec4_level0_col21" class="col_heading level0 col21" data-quarto-table-cell-role="th">Curricular units 1st sem (credited)</th>
+<th id="T_97ec4_level0_col22" class="col_heading level0 col22" data-quarto-table-cell-role="th">Curricular units 1st sem (enrolled)</th>
+<th id="T_97ec4_level0_col23" class="col_heading level0 col23" data-quarto-table-cell-role="th">Curricular units 1st sem (evaluations)</th>
+<th id="T_97ec4_level0_col24" class="col_heading level0 col24" data-quarto-table-cell-role="th">Curricular units 1st sem (approved)</th>
+<th id="T_97ec4_level0_col25" class="col_heading level0 col25" data-quarto-table-cell-role="th">Curricular units 1st sem (grade)</th>
+<th id="T_97ec4_level0_col26" class="col_heading level0 col26" data-quarto-table-cell-role="th">Curricular units 1st sem (without evaluations)</th>
+<th id="T_97ec4_level0_col27" class="col_heading level0 col27" data-quarto-table-cell-role="th">Curricular units 2nd sem (credited)</th>
+<th id="T_97ec4_level0_col28" class="col_heading level0 col28" data-quarto-table-cell-role="th">Curricular units 2nd sem (enrolled)</th>
+<th id="T_97ec4_level0_col29" class="col_heading level0 col29" data-quarto-table-cell-role="th">Curricular units 2nd sem (evaluations)</th>
+<th id="T_97ec4_level0_col30" class="col_heading level0 col30" data-quarto-table-cell-role="th">Curricular units 2nd sem (approved)</th>
+<th id="T_97ec4_level0_col31" class="col_heading level0 col31" data-quarto-table-cell-role="th">Curricular units 2nd sem (grade)</th>
+<th id="T_97ec4_level0_col32" class="col_heading level0 col32" data-quarto-table-cell-role="th">Curricular units 2nd sem (without evaluations)</th>
+<th id="T_97ec4_level0_col33" class="col_heading level0 col33" data-quarto-table-cell-role="th">Unemployment rate</th>
+<th id="T_97ec4_level0_col34" class="col_heading level0 col34" data-quarto-table-cell-role="th">Inflation rate</th>
+<th id="T_97ec4_level0_col35" class="col_heading level0 col35" data-quarto-table-cell-role="th">GDP</th>
+<th id="T_97ec4_level0_col36" class="col_heading level0 col36" data-quarto-table-cell-role="th">Target</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_97ec4_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</th>
+<td id="T_97ec4_row0_col0" class="data row0 col0">1</td>
+<td id="T_97ec4_row0_col1" class="data row0 col1">17</td>
+<td id="T_97ec4_row0_col2" class="data row0 col2">5</td>
+<td id="T_97ec4_row0_col3" class="data row0 col3">171</td>
+<td id="T_97ec4_row0_col4" class="data row0 col4">1</td>
+<td id="T_97ec4_row0_col5" class="data row0 col5">1</td>
+<td id="T_97ec4_row0_col6" class="data row0 col6">122.000000</td>
+<td id="T_97ec4_row0_col7" class="data row0 col7">1</td>
+<td id="T_97ec4_row0_col8" class="data row0 col8">19</td>
+<td id="T_97ec4_row0_col9" class="data row0 col9">12</td>
+<td id="T_97ec4_row0_col10" class="data row0 col10">5</td>
+<td id="T_97ec4_row0_col11" class="data row0 col11">9</td>
+<td id="T_97ec4_row0_col12" class="data row0 col12">127.300000</td>
+<td id="T_97ec4_row0_col13" class="data row0 col13">1</td>
+<td id="T_97ec4_row0_col14" class="data row0 col14">0</td>
+<td id="T_97ec4_row0_col15" class="data row0 col15">0</td>
+<td id="T_97ec4_row0_col16" class="data row0 col16">1</td>
+<td id="T_97ec4_row0_col17" class="data row0 col17">1</td>
+<td id="T_97ec4_row0_col18" class="data row0 col18">0</td>
+<td id="T_97ec4_row0_col19" class="data row0 col19">20</td>
+<td id="T_97ec4_row0_col20" class="data row0 col20">0</td>
+<td id="T_97ec4_row0_col21" class="data row0 col21">0</td>
+<td id="T_97ec4_row0_col22" class="data row0 col22">0</td>
+<td id="T_97ec4_row0_col23" class="data row0 col23">0</td>
+<td id="T_97ec4_row0_col24" class="data row0 col24">0</td>
+<td id="T_97ec4_row0_col25" class="data row0 col25">0.000000</td>
+<td id="T_97ec4_row0_col26" class="data row0 col26">0</td>
+<td id="T_97ec4_row0_col27" class="data row0 col27">0</td>
+<td id="T_97ec4_row0_col28" class="data row0 col28">0</td>
+<td id="T_97ec4_row0_col29" class="data row0 col29">0</td>
+<td id="T_97ec4_row0_col30" class="data row0 col30">0</td>
+<td id="T_97ec4_row0_col31" class="data row0 col31">0.000000</td>
+<td id="T_97ec4_row0_col32" class="data row0 col32">0</td>
+<td id="T_97ec4_row0_col33" class="data row0 col33">10.800000</td>
+<td id="T_97ec4_row0_col34" class="data row0 col34">1.400000</td>
+<td id="T_97ec4_row0_col35" class="data row0 col35">1.740000</td>
+<td id="T_97ec4_row0_col36" class="data row0 col36">Dropout</td>
+</tr>
+<tr class="even">
+<th id="T_97ec4_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</th>
+<td id="T_97ec4_row1_col0" class="data row1 col0">1</td>
+<td id="T_97ec4_row1_col1" class="data row1 col1">15</td>
+<td id="T_97ec4_row1_col2" class="data row1 col2">1</td>
+<td id="T_97ec4_row1_col3" class="data row1 col3">9254</td>
+<td id="T_97ec4_row1_col4" class="data row1 col4">1</td>
+<td id="T_97ec4_row1_col5" class="data row1 col5">1</td>
+<td id="T_97ec4_row1_col6" class="data row1 col6">160.000000</td>
+<td id="T_97ec4_row1_col7" class="data row1 col7">1</td>
+<td id="T_97ec4_row1_col8" class="data row1 col8">1</td>
+<td id="T_97ec4_row1_col9" class="data row1 col9">3</td>
+<td id="T_97ec4_row1_col10" class="data row1 col10">3</td>
+<td id="T_97ec4_row1_col11" class="data row1 col11">3</td>
+<td id="T_97ec4_row1_col12" class="data row1 col12">142.500000</td>
+<td id="T_97ec4_row1_col13" class="data row1 col13">1</td>
+<td id="T_97ec4_row1_col14" class="data row1 col14">0</td>
+<td id="T_97ec4_row1_col15" class="data row1 col15">0</td>
+<td id="T_97ec4_row1_col16" class="data row1 col16">0</td>
+<td id="T_97ec4_row1_col17" class="data row1 col17">1</td>
+<td id="T_97ec4_row1_col18" class="data row1 col18">0</td>
+<td id="T_97ec4_row1_col19" class="data row1 col19">19</td>
+<td id="T_97ec4_row1_col20" class="data row1 col20">0</td>
+<td id="T_97ec4_row1_col21" class="data row1 col21">0</td>
+<td id="T_97ec4_row1_col22" class="data row1 col22">6</td>
+<td id="T_97ec4_row1_col23" class="data row1 col23">6</td>
+<td id="T_97ec4_row1_col24" class="data row1 col24">6</td>
+<td id="T_97ec4_row1_col25" class="data row1 col25">14.000000</td>
+<td id="T_97ec4_row1_col26" class="data row1 col26">0</td>
+<td id="T_97ec4_row1_col27" class="data row1 col27">0</td>
+<td id="T_97ec4_row1_col28" class="data row1 col28">6</td>
+<td id="T_97ec4_row1_col29" class="data row1 col29">6</td>
+<td id="T_97ec4_row1_col30" class="data row1 col30">6</td>
+<td id="T_97ec4_row1_col31" class="data row1 col31">13.666667</td>
+<td id="T_97ec4_row1_col32" class="data row1 col32">0</td>
+<td id="T_97ec4_row1_col33" class="data row1 col33">13.900000</td>
+<td id="T_97ec4_row1_col34" class="data row1 col34">-0.300000</td>
+<td id="T_97ec4_row1_col35" class="data row1 col35">0.790000</td>
+<td id="T_97ec4_row1_col36" class="data row1 col36">Graduate</td>
+</tr>
+<tr class="odd">
+<th id="T_97ec4_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</th>
+<td id="T_97ec4_row2_col0" class="data row2 col0">1</td>
+<td id="T_97ec4_row2_col1" class="data row2 col1">1</td>
+<td id="T_97ec4_row2_col2" class="data row2 col2">5</td>
+<td id="T_97ec4_row2_col3" class="data row2 col3">9070</td>
+<td id="T_97ec4_row2_col4" class="data row2 col4">1</td>
+<td id="T_97ec4_row2_col5" class="data row2 col5">1</td>
+<td id="T_97ec4_row2_col6" class="data row2 col6">122.000000</td>
+<td id="T_97ec4_row2_col7" class="data row2 col7">1</td>
+<td id="T_97ec4_row2_col8" class="data row2 col8">37</td>
+<td id="T_97ec4_row2_col9" class="data row2 col9">37</td>
+<td id="T_97ec4_row2_col10" class="data row2 col10">9</td>
+<td id="T_97ec4_row2_col11" class="data row2 col11">9</td>
+<td id="T_97ec4_row2_col12" class="data row2 col12">124.800000</td>
+<td id="T_97ec4_row2_col13" class="data row2 col13">1</td>
+<td id="T_97ec4_row2_col14" class="data row2 col14">0</td>
+<td id="T_97ec4_row2_col15" class="data row2 col15">0</td>
+<td id="T_97ec4_row2_col16" class="data row2 col16">0</td>
+<td id="T_97ec4_row2_col17" class="data row2 col17">1</td>
+<td id="T_97ec4_row2_col18" class="data row2 col18">0</td>
+<td id="T_97ec4_row2_col19" class="data row2 col19">19</td>
+<td id="T_97ec4_row2_col20" class="data row2 col20">0</td>
+<td id="T_97ec4_row2_col21" class="data row2 col21">0</td>
+<td id="T_97ec4_row2_col22" class="data row2 col22">6</td>
+<td id="T_97ec4_row2_col23" class="data row2 col23">0</td>
+<td id="T_97ec4_row2_col24" class="data row2 col24">0</td>
+<td id="T_97ec4_row2_col25" class="data row2 col25">0.000000</td>
+<td id="T_97ec4_row2_col26" class="data row2 col26">0</td>
+<td id="T_97ec4_row2_col27" class="data row2 col27">0</td>
+<td id="T_97ec4_row2_col28" class="data row2 col28">6</td>
+<td id="T_97ec4_row2_col29" class="data row2 col29">0</td>
+<td id="T_97ec4_row2_col30" class="data row2 col30">0</td>
+<td id="T_97ec4_row2_col31" class="data row2 col31">0.000000</td>
+<td id="T_97ec4_row2_col32" class="data row2 col32">0</td>
+<td id="T_97ec4_row2_col33" class="data row2 col33">10.800000</td>
+<td id="T_97ec4_row2_col34" class="data row2 col34">1.400000</td>
+<td id="T_97ec4_row2_col35" class="data row2 col35">1.740000</td>
+<td id="T_97ec4_row2_col36" class="data row2 col36">Dropout</td>
+</tr>
+<tr class="even">
+<th id="T_97ec4_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</th>
+<td id="T_97ec4_row3_col0" class="data row3 col0">1</td>
+<td id="T_97ec4_row3_col1" class="data row3 col1">17</td>
+<td id="T_97ec4_row3_col2" class="data row3 col2">2</td>
+<td id="T_97ec4_row3_col3" class="data row3 col3">9773</td>
+<td id="T_97ec4_row3_col4" class="data row3 col4">1</td>
+<td id="T_97ec4_row3_col5" class="data row3 col5">1</td>
+<td id="T_97ec4_row3_col6" class="data row3 col6">122.000000</td>
+<td id="T_97ec4_row3_col7" class="data row3 col7">1</td>
+<td id="T_97ec4_row3_col8" class="data row3 col8">38</td>
+<td id="T_97ec4_row3_col9" class="data row3 col9">37</td>
+<td id="T_97ec4_row3_col10" class="data row3 col10">5</td>
+<td id="T_97ec4_row3_col11" class="data row3 col11">3</td>
+<td id="T_97ec4_row3_col12" class="data row3 col12">119.600000</td>
+<td id="T_97ec4_row3_col13" class="data row3 col13">1</td>
+<td id="T_97ec4_row3_col14" class="data row3 col14">0</td>
+<td id="T_97ec4_row3_col15" class="data row3 col15">0</td>
+<td id="T_97ec4_row3_col16" class="data row3 col16">1</td>
+<td id="T_97ec4_row3_col17" class="data row3 col17">0</td>
+<td id="T_97ec4_row3_col18" class="data row3 col18">0</td>
+<td id="T_97ec4_row3_col19" class="data row3 col19">20</td>
+<td id="T_97ec4_row3_col20" class="data row3 col20">0</td>
+<td id="T_97ec4_row3_col21" class="data row3 col21">0</td>
+<td id="T_97ec4_row3_col22" class="data row3 col22">6</td>
+<td id="T_97ec4_row3_col23" class="data row3 col23">8</td>
+<td id="T_97ec4_row3_col24" class="data row3 col24">6</td>
+<td id="T_97ec4_row3_col25" class="data row3 col25">13.428571</td>
+<td id="T_97ec4_row3_col26" class="data row3 col26">0</td>
+<td id="T_97ec4_row3_col27" class="data row3 col27">0</td>
+<td id="T_97ec4_row3_col28" class="data row3 col28">6</td>
+<td id="T_97ec4_row3_col29" class="data row3 col29">10</td>
+<td id="T_97ec4_row3_col30" class="data row3 col30">5</td>
+<td id="T_97ec4_row3_col31" class="data row3 col31">12.400000</td>
+<td id="T_97ec4_row3_col32" class="data row3 col32">0</td>
+<td id="T_97ec4_row3_col33" class="data row3 col33">9.400000</td>
+<td id="T_97ec4_row3_col34" class="data row3 col34">-0.800000</td>
+<td id="T_97ec4_row3_col35" class="data row3 col35">-3.120000</td>
+<td id="T_97ec4_row3_col36" class="data row3 col36">Graduate</td>
+</tr>
+<tr class="odd">
+<th id="T_97ec4_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</th>
+<td id="T_97ec4_row4_col0" class="data row4 col0">2</td>
+<td id="T_97ec4_row4_col1" class="data row4 col1">39</td>
+<td id="T_97ec4_row4_col2" class="data row4 col2">1</td>
+<td id="T_97ec4_row4_col3" class="data row4 col3">8014</td>
+<td id="T_97ec4_row4_col4" class="data row4 col4">0</td>
+<td id="T_97ec4_row4_col5" class="data row4 col5">1</td>
+<td id="T_97ec4_row4_col6" class="data row4 col6">100.000000</td>
+<td id="T_97ec4_row4_col7" class="data row4 col7">1</td>
+<td id="T_97ec4_row4_col8" class="data row4 col8">37</td>
+<td id="T_97ec4_row4_col9" class="data row4 col9">38</td>
+<td id="T_97ec4_row4_col10" class="data row4 col10">9</td>
+<td id="T_97ec4_row4_col11" class="data row4 col11">9</td>
+<td id="T_97ec4_row4_col12" class="data row4 col12">141.500000</td>
+<td id="T_97ec4_row4_col13" class="data row4 col13">0</td>
+<td id="T_97ec4_row4_col14" class="data row4 col14">0</td>
+<td id="T_97ec4_row4_col15" class="data row4 col15">0</td>
+<td id="T_97ec4_row4_col16" class="data row4 col16">1</td>
+<td id="T_97ec4_row4_col17" class="data row4 col17">0</td>
+<td id="T_97ec4_row4_col18" class="data row4 col18">0</td>
+<td id="T_97ec4_row4_col19" class="data row4 col19">45</td>
+<td id="T_97ec4_row4_col20" class="data row4 col20">0</td>
+<td id="T_97ec4_row4_col21" class="data row4 col21">0</td>
+<td id="T_97ec4_row4_col22" class="data row4 col22">6</td>
+<td id="T_97ec4_row4_col23" class="data row4 col23">9</td>
+<td id="T_97ec4_row4_col24" class="data row4 col24">5</td>
+<td id="T_97ec4_row4_col25" class="data row4 col25">12.333333</td>
+<td id="T_97ec4_row4_col26" class="data row4 col26">0</td>
+<td id="T_97ec4_row4_col27" class="data row4 col27">0</td>
+<td id="T_97ec4_row4_col28" class="data row4 col28">6</td>
+<td id="T_97ec4_row4_col29" class="data row4 col29">6</td>
+<td id="T_97ec4_row4_col30" class="data row4 col30">6</td>
+<td id="T_97ec4_row4_col31" class="data row4 col31">13.000000</td>
+<td id="T_97ec4_row4_col32" class="data row4 col32">0</td>
+<td id="T_97ec4_row4_col33" class="data row4 col33">13.900000</td>
+<td id="T_97ec4_row4_col34" class="data row4 col34">-0.300000</td>
+<td id="T_97ec4_row4_col35" class="data row4 col35">0.790000</td>
+<td id="T_97ec4_row4_col36" class="data row4 col36">Graduate</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="justifying-the-early-intervention-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="justifying-the-early-intervention-architecture">2. Justifying the Early Intervention Architecture</h2>
+<p>Before engineering my features, I need to determine what mathematically drives a student to drop out using the complete dataset (both 1st and 2nd semesters). By running a quick correlation analysis on the full historical cohort, I can see exactly which features are the strongest predictors of student outcomes.</p>
+<div id="86e5c7bb" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize column names to snake_case to prevent referencing errors during analysis.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> (</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    df.columns</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">str</span>.strip()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">str</span>.lower()</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">str</span>.replace(<span class="st">' '</span>, <span class="st">'_'</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">str</span>.replace(<span class="st">'('</span>, <span class="st">''</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">str</span>.replace(<span class="st">')'</span>, <span class="st">''</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">str</span>.replace(<span class="st">'</span><span class="ch">\t</span><span class="st">'</span>, <span class="st">''</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Isolate the historical cohort (students with final outcomes) to evaluate full-year feature correlations.</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>df_full_historical <span class="op">=</span> df[df[<span class="st">'target'</span>].isin([<span class="st">'Graduate'</span>, <span class="st">'Dropout'</span>])].copy()</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the target outcomes into a binary numeric format to enable correlation calculations.</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>df_full_historical[<span class="st">'target_num'</span>] <span class="op">=</span> df_full_historical[<span class="st">'target'</span>].replace({<span class="st">'Dropout'</span>: <span class="dv">1</span>, <span class="st">'Graduate'</span>: <span class="dv">0</span>})</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the correlation of all numeric features against student attrition to identify the strongest indicators.</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>full_corr <span class="op">=</span> df_full_historical.corr(numeric_only<span class="op">=</span><span class="va">True</span>)[<span class="st">'target_num'</span>].sort_values()</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the findings to justify our feature selection strategy.</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Top retention predictors.</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>display(full_corr.head(<span class="dv">4</span>).to_frame(name<span class="op">=</span><span class="st">'Correlation to Attrition'</span>).style.set_caption(<span class="st">"FULL DATASET: TOP PREDICTORS OF RETENTION"</span>))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Top dropout predictors.</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>display(full_corr.dropna().tail(<span class="dv">5</span>).head(<span class="dv">4</span>).to_frame(name<span class="op">=</span><span class="st">'Correlation to Attrition'</span>).style.set_caption(<span class="st">"FULL DATASET: TOP PREDICTORS OF DROPPING OUT"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_b0cf3" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_b0cf3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: FULL DATASET: TOP PREDICTORS OF RETENTION
+</figcaption>
+<div aria-describedby="T_b0cf3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_b0cf3" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_b0cf3_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Correlation to Attrition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_b0cf3_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">curricular_units_2nd_sem_approved</th>
+<td id="T_b0cf3_row0_col0" class="data row0 col0">-0.653995</td>
+</tr>
+<tr class="even">
+<th id="T_b0cf3_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">curricular_units_2nd_sem_grade</th>
+<td id="T_b0cf3_row1_col0" class="data row1 col0">-0.605350</td>
+</tr>
+<tr class="odd">
+<th id="T_b0cf3_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">curricular_units_1st_sem_approved</th>
+<td id="T_b0cf3_row2_col0" class="data row2 col0">-0.554881</td>
+</tr>
+<tr class="even">
+<th id="T_b0cf3_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">curricular_units_1st_sem_grade</th>
+<td id="T_b0cf3_row3_col0" class="data row3 col0">-0.519927</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_e0c4c" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_e0c4c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: FULL DATASET: TOP PREDICTORS OF DROPPING OUT
+</figcaption>
+<div aria-describedby="T_e0c4c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_e0c4c" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_e0c4c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Correlation to Attrition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_e0c4c_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">application_mode</th>
+<td id="T_e0c4c_row0_col0" class="data row0 col0">0.244507</td>
+</tr>
+<tr class="even">
+<th id="T_e0c4c_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">gender</th>
+<td id="T_e0c4c_row1_col0" class="data row1 col0">0.251955</td>
+</tr>
+<tr class="odd">
+<th id="T_e0c4c_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">debtor</th>
+<td id="T_e0c4c_row2_col0" class="data row2 col0">0.267207</td>
+</tr>
+<tr class="even">
+<th id="T_e0c4c_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">age_at_enrollment</th>
+<td id="T_e0c4c_row3_col0" class="data row3 col0">0.267229</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>The Trade-Off:</strong> The data revealed that 2nd-semester grades are the strongest predictors of retention. This presents a choice. I could build a highly accurate model using end-of-year data, but that model could not be run until May. By that time, many struggling students will have already dropped out.</p>
+<p>To create an actionable Early Intervention System, I acknowledge the predictive power of 2nd-semester data but deliberately discard it. Restricting my model to 1st-semester data costs a slight amount of accuracy, but it buys the university a significant operational advantage: a 5-month head start to intervene in December.</p>
+</section>
+<section id="data-engineering-building-the-december-deployment-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="data-engineering-building-the-december-deployment-pipeline">3. Data Engineering: Building the December Deployment Pipeline</h2>
+<p>As proven in the previous step, 2nd-semester academic performance contains the strongest mathematical signals for predicting student attrition. To enforce the mid-year operational constraint, I am dropping those features entirely.</p>
+<p>Because <code>Enrolled</code> is a transient state, I also must isolate the historical ground truth from the active student body. My data engineering pipeline executes three steps: 1. <strong>Drop Late-Stage Features:</strong> Remove all 2nd-semester data. 2. <strong>Isolate Historical Outcomes:</strong> Split the dataset into a historical training cohort (<code>Graduate</code> and <code>Dropout</code>) and a live deployment cohort (<code>Enrolled</code>). 3. <strong>Engineer the Target Variable:</strong> Convert the historical target into a numeric binary classification (1 = <code>Dropout</code>, 0 = <code>Graduate</code>). By assigning <code>Dropout</code> as the positive class, the model is mathematically configured to output a direct “Risk Probability” score.</p>
+<div id="a23a8712" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove all second-semester data to simulate an early-warning deployment at the end of the first semester.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cols_to_drop <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> df.columns <span class="cf">if</span> <span class="st">'2nd_sem'</span> <span class="kw">in</span> col]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop(columns<span class="op">=</span>cols_to_drop)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate the dataset into a historical training cohort and a live deployment cohort of currently enrolled students.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>df_historical <span class="op">=</span> df[df[<span class="st">'target'</span>].isin([<span class="st">'Graduate'</span>, <span class="st">'Dropout'</span>])].copy()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>df_live <span class="op">=</span> df[df[<span class="st">'target'</span>] <span class="op">==</span> <span class="st">'Enrolled'</span>].copy()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Reassign the target variable so the model treats dropping out as the positive class for risk probability scoring.</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>df_historical[<span class="st">'target'</span>] <span class="op">=</span> df_historical[<span class="st">'target'</span>].replace({<span class="st">'Dropout'</span>: <span class="dv">1</span>, <span class="st">'Graduate'</span>: <span class="dv">0</span>})</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the dimensions of the newly engineered subsets.</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>split_info <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Cohort Environment'</span>: [<span class="st">'Historical (Training/Test)'</span>, <span class="st">'Live Deployment (Enrolled)'</span>],</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Total Students'</span>: [df_historical.shape[<span class="dv">0</span>], df_live.shape[<span class="dv">0</span>]]</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>display(split_info.style.set_caption(<span class="st">"DATASET SPLIT DIMENSIONS"</span>).hide(axis<span class="op">=</span><span class="st">'index'</span>))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate and display the historical class distribution, mapping numeric targets back to readable labels.</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>target_dist <span class="op">=</span> (df_historical[<span class="st">'target'</span>].value_counts(normalize<span class="op">=</span><span class="va">True</span>) <span class="op">*</span> <span class="dv">100</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>target_dist <span class="op">=</span> target_dist.rename(index<span class="op">=</span>{<span class="dv">0</span>: <span class="st">'Graduate'</span>, <span class="dv">1</span>: <span class="st">'Dropout'</span>})</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>display(target_dist.to_frame(name<span class="op">=</span><span class="st">'Class Distribution (%)'</span>).style.set_caption(<span class="st">"HISTORICAL TARGET DISTRIBUTION"</span>))</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># dataset split dimensions</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>split_info <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Cohort Environment'</span>: [<span class="st">'Historical (Training/Test)'</span>, <span class="st">'Live Deployment (Enrolled)'</span>],</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Total Students'</span>: [df_historical.shape[<span class="dv">0</span>], df_live.shape[<span class="dv">0</span>]]</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>display(split_info.style.set_caption(<span class="st">"DATASET SPLIT DIMENSIONS"</span>).hide(axis<span class="op">=</span><span class="st">'index'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_d13b2" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_d13b2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: DATASET SPLIT DIMENSIONS
+</figcaption>
+<div aria-describedby="T_d13b2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_d13b2" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_d13b2_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Cohort Environment</th>
+<th id="T_d13b2_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Total Students</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_d13b2_row0_col0" class="data row0 col0">Historical (Training/Test)</td>
+<td id="T_d13b2_row0_col1" class="data row0 col1">3630</td>
+</tr>
+<tr class="even">
+<td id="T_d13b2_row1_col0" class="data row1 col0">Live Deployment (Enrolled)</td>
+<td id="T_d13b2_row1_col1" class="data row1 col1">794</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_15f72" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_15f72-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: HISTORICAL TARGET DISTRIBUTION
+</figcaption>
+<div aria-describedby="T_15f72-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_15f72" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_15f72_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class Distribution (%)</th>
+</tr>
+<tr class="even">
+<th class="index_name level0" data-quarto-table-cell-role="th">target</th>
+<th class="blank col0" data-quarto-table-cell-role="th">&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_15f72_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Graduate</th>
+<td id="T_15f72_row0_col0" class="data row0 col0">60.850000</td>
+</tr>
+<tr class="even">
+<th id="T_15f72_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">Dropout</th>
+<td id="T_15f72_row1_col0" class="data row1 col0">39.150000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_343f5" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_343f5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6: DATASET SPLIT DIMENSIONS
+</figcaption>
+<div aria-describedby="T_343f5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_343f5" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_343f5_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Cohort Environment</th>
+<th id="T_343f5_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Total Students</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_343f5_row0_col0" class="data row0 col0">Historical (Training/Test)</td>
+<td id="T_343f5_row0_col1" class="data row0 col1">3630</td>
+</tr>
+<tr class="even">
+<td id="T_343f5_row1_col0" class="data row1 col0">Live Deployment (Enrolled)</td>
+<td id="T_343f5_row1_col1" class="data row1 col1">794</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exploratory-data-analysis-isolating-the-historical-truth" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-data-analysis-isolating-the-historical-truth">4. Exploratory Data Analysis: Isolating the Historical Truth</h2>
+<p>Before fitting the algorithms, I must understand the mathematical relationships driving student attrition. To prevent target leakage and ensure my assumptions are grounded in reality, this Exploratory Data Analysis (EDA) isolates the <code>df_historical</code> dataset (students who have definitively graduated or dropped out).</p>
+<section id="target-imbalance-and-metric-selection" class="level3">
+<h3 class="anchored" data-anchor-id="target-imbalance-and-metric-selection">4.1 Target Imbalance and Metric Selection</h3>
+<p>My baseline univarite analysis revealed a heavy class imbalance. There are significantly more Graduates than Dropouts. This imbalance dictates my modeling strategy. Standard Accuracy will be misleading because a model could achieve high accuracy simply by guessing “Graduate” every time. I will rely on metrics like Balanced Accuracy and Recall to evaluate my final models fairly across all student groups.</p>
+</section>
+<section id="systematic-outlier-handling" class="level3">
+<h3 class="anchored" data-anchor-id="systematic-outlier-handling">4.2 Systematic Outlier Handling</h3>
+<p>Real-world educational data contains anomalies, such as unusual ages or extreme course loads. Instead of manually inspecting arbitrary features, I programmatically identified all continuous numeric variables and applied the Interquartile Range (IQR) method. Rather than dropping these outliers and losing valuable training data, I capped the extreme upper and lower bounds. This preserves the signal while preventing extreme outliers from distorting the weights of distance-based or linear models.</p>
+<div id="409acfbc" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify all continuous numerical features to prepare for outlier handling.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>numeric_cols <span class="op">=</span> df_historical.select_dtypes(include<span class="op">=</span>[<span class="st">'int64'</span>, <span class="st">'float64'</span>]).columns.tolist()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'target'</span> <span class="kw">in</span> numeric_cols:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    numeric_cols.remove(<span class="st">'target'</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply Winsorization using the Interquartile Range (IQR) method to cap extreme values, </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># preserving data rows while stabilizing the weights of our future models.</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> numeric_cols:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    q1 <span class="op">=</span> df_historical[col].quantile(<span class="fl">0.25</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    q3 <span class="op">=</span> df_historical[col].quantile(<span class="fl">0.75</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    iqr <span class="op">=</span> q3 <span class="op">-</span> q1</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    upper_bound <span class="op">=</span> q3 <span class="op">+</span> <span class="fl">1.5</span> <span class="op">*</span> iqr</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    lower_bound <span class="op">=</span> q1 <span class="op">-</span> <span class="fl">1.5</span> <span class="op">*</span> iqr</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    df_historical[col] <span class="op">=</span> df_historical[col].clip(lower<span class="op">=</span>lower_bound, upper<span class="op">=</span>upper_bound)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="feature-target-correlation-collinearity" class="level3">
+<h3 class="anchored" data-anchor-id="feature-target-correlation-collinearity">4.3 Feature-Target Correlation &amp; Collinearity</h3>
+<p>To determine which features hold the strongest predictive power, I calculated the correlation matrix for all numeric variables against the final outcome. 1. <strong>Collinearity:</strong> The correlation heatmap allows me to identify highly correlated predictors (e.g., first and second-semester performance), warning me of potential multicollinearity issues for linear models. 2. <strong>Predictive Signal:</strong> I extracted the top variables mathematically correlated with the target variable and visualized their distributions. This removes human bias from the EDA and proves exactly which factors most strongly separate graduates from dropouts.</p>
+<div id="19034434" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a correlation matrix to assess relationships between predictive features and the target variable.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>corr_matrix <span class="op">=</span> df_historical[numeric_cols <span class="op">+</span> [<span class="st">'target'</span>]].corr()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the top four features that possess the strongest absolute correlation with student attrition.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>target_corr <span class="op">=</span> corr_matrix[<span class="st">'target'</span>].drop(<span class="st">'target'</span>).sort_values(key<span class="op">=</span><span class="bu">abs</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>top_features <span class="op">=</span> target_corr.head(<span class="dv">4</span>).index.tolist()</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize a correlation heatmap to detect multicollinearity among the predictor variables.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>))</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>sns.heatmap(corr_matrix, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, annot<span class="op">=</span><span class="va">False</span>, fmt<span class="op">=</span><span class="st">".2f"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Multivariate Correlation Heatmap (Collinearity Check)'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the distributions of the strongest predictors to visually confirm how well they separate graduates from dropouts.</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>axes <span class="op">=</span> axes.flatten()</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, feature <span class="kw">in</span> <span class="bu">enumerate</span>(top_features):</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    sns.boxplot(</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        data<span class="op">=</span>df_historical, </span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">'target'</span>, </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>feature, </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        palette<span class="op">=</span><span class="st">'muted'</span>, </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>axes[i],</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        hue<span class="op">=</span><span class="st">'target'</span>,</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>        legend<span class="op">=</span><span class="va">False</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    axes[i].set_title(<span class="ss">f'Signal Rank </span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>feature<span class="sc">}</span><span class="ss">'</span>, fontsize<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    axes[i].set_xticks([<span class="dv">0</span>, <span class="dv">1</span>])</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    axes[i].set_xticklabels([<span class="st">'Graduate'</span>, <span class="st">'Dropout'</span>])</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    axes[i].set_xlabel(<span class="st">''</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analysis_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analysis_files/figure-html/cell-6-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="preprocessing-architecture-handling-collinearity-and-scaling" class="level2">
+<h2 class="anchored" data-anchor-id="preprocessing-architecture-handling-collinearity-and-scaling">5. Preprocessing Architecture: Handling Collinearity and Scaling</h2>
+<p>With the historical ground truth isolated, my next step is to build the data preprocessing architecture.</p>
+<p>During the Exploratory Data Analysis, the correlation heatmap warned me of potential multicollinearity among the academic predictor variables. To eliminate visual bias, I ran a programmatic check on the correlation matrix using a strict 0.75 threshold. This revealed a single pair of highly redundant features: <code>curricular_units_1st_sem_approved</code> and <code>curricular_units_1st_sem_grade</code> (Pearson correlation of 0.762). Because these two variables contain effectively the same information, keeping both would destabilize the weights of my linear models. Guided by my EDA boxplots, which proved <code>approved</code> units carry the strongest mathematical signal for retention, I systematically dropped the <code>grade</code> feature.</p>
+<p>To build a professional and leak-proof pipeline, I utilized a Scikit-Learn <code>ColumnTransformer</code>. This ensures that all numerical variables are standardized (<code>StandardScaler</code>) and all categorical variables are mapped into binary matrices (<code>OneHotEncoder</code>) simultaneously, preventing any data from the test set from leaking into the training transformations.</p>
+<div id="49bc8fed" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminate multicollinearity by dropping the redundant feature identified during the programmatic EDA check.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df_historical <span class="op">=</span> df_historical.drop(columns<span class="op">=</span>[<span class="st">'curricular_units_1st_sem_grade'</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Isolate the predictor features from the target variable using the cleaned historical dataset.</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>X_hist <span class="op">=</span> df_historical.drop(columns<span class="op">=</span>[<span class="st">'target'</span>])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>y_hist <span class="op">=</span> df_historical[<span class="st">'target'</span>]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define categorical variables based on the dataset dictionary for proper encoding.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>cat_vars <span class="op">=</span> [<span class="st">'marital_status'</span>, <span class="st">'application_mode'</span>, <span class="st">'application_order'</span>, <span class="st">'course'</span>, </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">'daytime/evening_attendance'</span>, <span class="st">'previous_qualification'</span>, <span class="st">'nacionality'</span>, </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mother's_qualification"</span>, <span class="st">"father's_qualification"</span>, <span class="st">"mother's_occupation"</span>, </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"father's_occupation"</span>, <span class="st">'displaced'</span>, <span class="st">'educational_special_needs'</span>, </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">'debtor'</span>, <span class="st">'tuition_fees_up_to_date'</span>, <span class="st">'gender'</span>, <span class="st">'scholarship_holder'</span>, <span class="st">'international'</span>]</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Cast categorical integer codes to strings to ensure the encoder treats them as discrete categories, not math.</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> cat_vars:</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    X_hist[col] <span class="op">=</span> X_hist[col].astype(<span class="bu">str</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Dynamically extract the remaining continuous variables to route them to the standard scaler.</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>num_vars <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> X_hist.columns <span class="cf">if</span> col <span class="kw">not</span> <span class="kw">in</span> cat_vars]</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a stratified train-test split to strictly preserve the 60/40 target class imbalance.</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    X_hist, y_hist, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>, stratify<span class="op">=</span>y_hist</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Bundle the mathematical transformations into a single preprocessor engine to prevent data leakage.</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>preprocessor <span class="op">=</span> ColumnTransformer(</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    transformers<span class="op">=</span>[</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'num'</span>, StandardScaler(), num_vars),</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'cat'</span>, OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">'ignore'</span>), cat_vars)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="predictive-modeling-hyperparameter-tuning" class="level2">
+<h2 class="anchored" data-anchor-id="predictive-modeling-hyperparameter-tuning">6. Predictive Modeling &amp; Hyperparameter Tuning</h2>
+<p>With the collinearity addressed and the preprocessing architecture locked in, I moved to the modeling phase. I trained the algorithms strictly on the binary historical training set to capture the pure signal of student attrition.</p>
+<p>My approach was to compare three distinct architectures to see which mathematical approach best mapped the problem:</p>
+<ol type="1">
+<li><strong>LASSO Logistic Regression:</strong> A regularized linear model using an L1 penalty. I included this because it performs automatic feature selection, resulting in a highly interpretable model for non-technical business stakeholders.</li>
+<li><strong>Random Forest Classifier:</strong> A bagging ensemble method that builds hundreds of independent decision trees to capture complex, non-linear student risk profiles.</li>
+<li><strong>Gradient Boosting Classifier:</strong> A sequential tree approach where each tree is built specifically to correct the mathematical errors of the previous tree.</li>
+</ol>
+<p>I applied balanced class weights to ensure the algorithms did not ignore the minority class (Dropouts). Finally, I optimized the hyperparameters for all three models using 5-fold Cross-Validation (<code>GridSearchCV</code>). To extract the absolute maximum performance from the 1st-semester data without wasting compute time, the grids below reflect a fine-tuned search centered on the optimal parameters discovered during an initial coarse search.</p>
+<div id="fd9688bf" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the LASSO pipeline and define a fine-tuned grid around the coarse winner (C=0.8).</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lasso_pipe <span class="op">=</span> Pipeline([</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'preprocessor'</span>, preprocessor),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'lasso'</span>, LogisticRegression(penalty<span class="op">=</span><span class="st">'l1'</span>, solver<span class="op">=</span><span class="st">'liblinear'</span>, class_weight<span class="op">=</span><span class="st">'balanced'</span>, random_state<span class="op">=</span><span class="dv">42</span>, max_iter<span class="op">=</span><span class="dv">2000</span>))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>lasso_params <span class="op">=</span> {<span class="st">'lasso__C'</span>: [<span class="fl">0.6</span>, <span class="fl">0.8</span>, <span class="fl">1.0</span>]}</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>lasso_grid <span class="op">=</span> GridSearchCV(lasso_pipe, lasso_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'balanced_accuracy'</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>display(Markdown(<span class="st">"**Tuning LASSO Logistic Regression...**"</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>lasso_grid.fit(X_train, y_train)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the Random Forest pipeline with a tight grid centered on 100 trees and a depth of 10.</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>rf_pipe <span class="op">=</span> Pipeline([</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'preprocessor'</span>, preprocessor),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'rf'</span>, RandomForestClassifier(class_weight<span class="op">=</span><span class="st">'balanced'</span>, random_state<span class="op">=</span><span class="dv">42</span>))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>rf_params <span class="op">=</span> {</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">'rf__n_estimators'</span>: [<span class="dv">80</span>, <span class="dv">100</span>, <span class="dv">120</span>],</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">'rf__max_depth'</span>: [<span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>],</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">'rf__min_samples_split'</span>: [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>rf_grid <span class="op">=</span> GridSearchCV(rf_pipe, rf_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'balanced_accuracy'</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>display(Markdown(<span class="st">"**Tuning Random Forest Classifier...**"</span>))</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>rf_grid.fit(X_train, y_train)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the Gradient Boosting pipeline, fine-tuning the learning rate around 0.10 and depth around 3.</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>gb_pipe <span class="op">=</span> Pipeline([</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'preprocessor'</span>, preprocessor),</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'gb'</span>, GradientBoostingClassifier(random_state<span class="op">=</span><span class="dv">42</span>))</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>gb_params <span class="op">=</span> {</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gb__n_estimators'</span>: [<span class="dv">80</span>, <span class="dv">100</span>, <span class="dv">120</span>],</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gb__learning_rate'</span>: [<span class="fl">0.05</span>, <span class="fl">0.10</span>, <span class="fl">0.15</span>],</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">'gb__max_depth'</span>: [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>gb_grid <span class="op">=</span> GridSearchCV(gb_pipe, gb_params, cv<span class="op">=</span><span class="dv">5</span>, scoring<span class="op">=</span><span class="st">'balanced_accuracy'</span>, n_jobs<span class="op">=-</span><span class="dv">1</span>)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>display(Markdown(<span class="st">"**Tuning Gradient Boosting Classifier...**"</span>))</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>gb_grid.fit(X_train, y_train)</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Output the final validated scores</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>cv_results <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Algorithm'</span>: [<span class="st">'LASSO'</span>, <span class="st">'Random Forest'</span>, <span class="st">'Gradient Boosting'</span>],</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Best Balanced Accuracy'</span>: [lasso_grid.best_score_, rf_grid.best_score_, gb_grid.best_score_],</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Optimal Parameters'</span>: [<span class="bu">str</span>(lasso_grid.best_params_), <span class="bu">str</span>(rf_grid.best_params_), <span class="bu">str</span>(gb_grid.best_params_)]</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>display(cv_results.style.set_caption(<span class="st">"FINAL VALIDATION SCORES"</span>).<span class="bu">format</span>({<span class="st">'Best Balanced Accuracy'</span>: <span class="st">'</span><span class="sc">{:.4f}</span><span class="st">'</span>}).hide(axis<span class="op">=</span><span class="st">'index'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tuning LASSO Logistic Regression...
+Tuning Random Forest Classifier...
+Tuning Gradient Boosting Classifier...</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_d6be7" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_d6be7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7: FINAL VALIDATION SCORES
+</figcaption>
+<div aria-describedby="T_d6be7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_d6be7" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_d6be7_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Algorithm</th>
+<th id="T_d6be7_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Best Balanced Accuracy</th>
+<th id="T_d6be7_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Optimal Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_d6be7_row0_col0" class="data row0 col0">LASSO</td>
+<td id="T_d6be7_row0_col1" class="data row0 col1">0.8518</td>
+<td id="T_d6be7_row0_col2" class="data row0 col2">{'lasso__C': 0.8}</td>
+</tr>
+<tr class="even">
+<td id="T_d6be7_row1_col0" class="data row1 col0">Random Forest</td>
+<td id="T_d6be7_row1_col1" class="data row1 col1">0.8388</td>
+<td id="T_d6be7_row1_col2" class="data row1 col2">{'rf__max_depth': 12, 'rf__min_samples_split': 3, 'rf__n_estimators': 120}</td>
+</tr>
+<tr class="odd">
+<td id="T_d6be7_row2_col0" class="data row2 col0">Gradient Boosting</td>
+<td id="T_d6be7_row2_col1" class="data row2 col1">0.8471</td>
+<td id="T_d6be7_row2_col2" class="data row2 col2">{'gb__learning_rate': 0.05, 'gb__max_depth': 4, 'gb__n_estimators': 100}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="model-evaluation">7. Model Evaluation</h2>
+<p>After tuning the hyperparameters, I evaluated the three models on the unseen test data. For an early intervention system, the primary metric is recall for the dropout class.</p>
+<p>Recall measures the ability to correctly identify students who will eventually drop out. Missing an at-risk student has a high cost. I am willing to accept some false positives (flagging a student who ultimately graduates) because scheduling an unnecessary advising meeting is a low-cost intervention.</p>
+<p>I evaluated each model against the test set to determine which one maximized dropout recall while maintaining a stable balanced accuracy.</p>
+<div id="e9da98c1" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate all tuned models on the unseen test set to compare generalization.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'LASSO Logistic Regression'</span>: lasso_grid,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Random Forest'</span>: rf_grid,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Gradient Boosting'</span>: gb_grid</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate balanced accuracy and dropout recall for each model.</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, model <span class="kw">in</span> models.items():</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    preds <span class="op">=</span> model.predict(X_test)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    bal_acc <span class="op">=</span> balanced_accuracy_score(y_test, preds)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    dropout_recall <span class="op">=</span> recall_score(y_test, preds, pos_label<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    results.append({<span class="st">'Model'</span>: name, <span class="st">'Balanced Accuracy'</span>: bal_acc, <span class="st">'Dropout Recall'</span>: dropout_recall})</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the performance metrics into a clean table for comparison.</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results).sort_values(by<span class="op">=</span><span class="st">'Dropout Recall'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>display(results_df.style.<span class="bu">format</span>({<span class="st">'Balanced Accuracy'</span>: <span class="st">'</span><span class="sc">{:.4f}</span><span class="st">'</span>, <span class="st">'Dropout Recall'</span>: <span class="st">'</span><span class="sc">{:.4f}</span><span class="st">'</span>}).hide(axis<span class="op">=</span><span class="st">'index'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<table id="T_2b5ba" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_2b5ba_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Model</th>
+<th id="T_2b5ba_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Balanced Accuracy</th>
+<th id="T_2b5ba_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Dropout Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_2b5ba_row0_col0" class="data row0 col0">LASSO Logistic Regression</td>
+<td id="T_2b5ba_row0_col1" class="data row0 col1">0.8518</td>
+<td id="T_2b5ba_row0_col2" class="data row0 col2">0.8415</td>
+</tr>
+<tr class="even">
+<td id="T_2b5ba_row1_col0" class="data row1 col0">Random Forest</td>
+<td id="T_2b5ba_row1_col1" class="data row1 col1">0.8415</td>
+<td id="T_2b5ba_row1_col2" class="data row1 col2">0.8028</td>
+</tr>
+<tr class="odd">
+<td id="T_2b5ba_row2_col0" class="data row2 col0">Gradient Boosting</td>
+<td id="T_2b5ba_row2_col1" class="data row2 col1">0.8521</td>
+<td id="T_2b5ba_row2_col2" class="data row2 col2">0.7993</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="final-model-selection-and-feature-impact" class="level3">
+<h3 class="anchored" data-anchor-id="final-model-selection-and-feature-impact">7.1 Final Model Selection and Feature Impact</h3>
+<p>Gradient Boosting and LASSO achieved nearly identical balanced accuracy scores. LASSO performed significantly better on the primary metric, successfully identifying 84.15% of the actual dropouts in the test set.</p>
+<p>I selected LASSO as the final model for deployment. Because it is a regularized linear model, it provides high interpretability. I extracted the model coefficients to determine which student features carry the most weight. This allows the university to understand exactly what drives student attrition, rather than just receiving a black-box prediction.</p>
+<div id="a63482c0" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Isolate the final LASSO model and its feature names to interpret the results.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>final_model <span class="op">=</span> lasso_grid.best_estimator_</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>lasso_step <span class="op">=</span> final_model.named_steps[<span class="st">'lasso'</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>feature_names <span class="op">=</span> final_model.named_steps[<span class="st">'preprocessor'</span>].get_feature_names_out()</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate final predictions to evaluate specific class performance.</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>lasso_preds <span class="op">=</span> final_model.predict(X_test)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>report_dict <span class="op">=</span> classification_report(y_test, lasso_preds, target_names<span class="op">=</span>[<span class="st">'Graduate'</span>, <span class="st">'Dropout'</span>], output_dict<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>display(pd.DataFrame(report_dict).T.<span class="bu">round</span>(<span class="dv">3</span>).style.set_caption(<span class="st">"FINAL MODEL: LASSO LOGISTIC REGRESSION"</span>))</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Map the model coefficients to their original feature names.</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>coef_df <span class="op">=</span> pd.DataFrame({<span class="st">'Feature'</span>: feature_names, <span class="st">'Coefficient'</span>: lasso_step.coef_[<span class="dv">0</span>]})</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>coef_df[<span class="st">'Feature'</span>] <span class="op">=</span> coef_df[<span class="st">'Feature'</span>].<span class="bu">str</span>.replace(<span class="st">'num__'</span>, <span class="st">''</span>).<span class="bu">str</span>.replace(<span class="st">'cat__'</span>, <span class="st">''</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the top 10 features with the highest absolute impact on the prediction.</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>top_features <span class="op">=</span> coef_df.reindex(coef_df[<span class="st">'Coefficient'</span>].<span class="bu">abs</span>().sort_values(ascending<span class="op">=</span><span class="va">False</span>).index).head(<span class="dv">10</span>).copy()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up a side-by-side visual to display the confusion matrix and the feature impact.</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">6</span>), gridspec_kw<span class="op">=</span>{<span class="st">'width_ratios'</span>: [<span class="dv">1</span>, <span class="dv">2</span>]})</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the confusion matrix to show the exact breakdown of true and false predictions.</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>ConfusionMatrixDisplay.from_predictions(</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    y_test, lasso_preds, </span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    display_labels<span class="op">=</span>[<span class="st">'Graduate'</span>, <span class="st">'Dropout'</span>], </span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    cmap<span class="op">=</span><span class="st">'Blues'</span>, </span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>axes[<span class="dv">0</span>], </span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    colorbar<span class="op">=</span><span class="va">False</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">'Test Set Confusion Matrix'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].grid(<span class="va">False</span>)</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the top dropout drivers to communicate the risk factors to stakeholders.</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>sns.barplot(data<span class="op">=</span>top_features, x<span class="op">=</span><span class="st">'Coefficient'</span>, y<span class="op">=</span><span class="st">'Feature'</span>, palette<span class="op">=</span><span class="st">'vlag'</span>, ax<span class="op">=</span>axes[<span class="dv">1</span>], hue<span class="op">=</span><span class="st">'Feature'</span>, legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">'Top 10 Drivers of Student Dropout'</span>, fontsize<span class="op">=</span><span class="dv">14</span>)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_xlabel(<span class="st">'Impact on Dropout Risk (Positive = Higher Risk)'</span>, fontsize<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_ylabel(<span class="st">''</span>)</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_bb116" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_bb116-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8: FINAL MODEL: LASSO LOGISTIC REGRESSION
+</figcaption>
+<div aria-describedby="T_bb116-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_bb116" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_bb116_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">precision</th>
+<th id="T_bb116_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">recall</th>
+<th id="T_bb116_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">f1-score</th>
+<th id="T_bb116_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">support</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th id="T_bb116_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">Graduate</th>
+<td id="T_bb116_row0_col0" class="data row0 col0">0.894000</td>
+<td id="T_bb116_row0_col1" class="data row0 col1">0.862000</td>
+<td id="T_bb116_row0_col2" class="data row0 col2">0.878000</td>
+<td id="T_bb116_row0_col3" class="data row0 col3">442.000000</td>
+</tr>
+<tr class="even">
+<th id="T_bb116_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">Dropout</th>
+<td id="T_bb116_row1_col0" class="data row1 col0">0.797000</td>
+<td id="T_bb116_row1_col1" class="data row1 col1">0.842000</td>
+<td id="T_bb116_row1_col2" class="data row1 col2">0.818000</td>
+<td id="T_bb116_row1_col3" class="data row1 col3">284.000000</td>
+</tr>
+<tr class="odd">
+<th id="T_bb116_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">accuracy</th>
+<td id="T_bb116_row2_col0" class="data row2 col0">0.854000</td>
+<td id="T_bb116_row2_col1" class="data row2 col1">0.854000</td>
+<td id="T_bb116_row2_col2" class="data row2 col2">0.854000</td>
+<td id="T_bb116_row2_col3" class="data row2 col3">0.854000</td>
+</tr>
+<tr class="even">
+<th id="T_bb116_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">macro avg</th>
+<td id="T_bb116_row3_col0" class="data row3 col0">0.846000</td>
+<td id="T_bb116_row3_col1" class="data row3 col1">0.852000</td>
+<td id="T_bb116_row3_col2" class="data row3 col2">0.848000</td>
+<td id="T_bb116_row3_col3" class="data row3 col3">726.000000</td>
+</tr>
+<tr class="odd">
+<th id="T_bb116_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">weighted avg</th>
+<td id="T_bb116_row4_col0" class="data row4 col0">0.856000</td>
+<td id="T_bb116_row4_col1" class="data row4 col1">0.854000</td>
+<td id="T_bb116_row4_col2" class="data row4 col2">0.855000</td>
+<td id="T_bb116_row4_col3" class="data row4 col3">726.000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analysis_files/figure-html/cell-10-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="live-deployment-generating-the-intervention-list" class="level2">
+<h2 class="anchored" data-anchor-id="live-deployment-generating-the-intervention-list">8. Live Deployment: Generating the Intervention List</h2>
+<p>The final stage of the project transitions the model from testing to deployment. I applied the trained LASSO model to the <code>Enrolled</code> cohort, which consists of students whose final outcomes are not yet determined.</p>
+<p>Instead of generating a simple binary prediction, I configured the model to output a continuous risk probability based strictly on 1st-semester data. To make this actionable for academic advisors with limited time, I converted these raw probabilities into relative percentile ranks and grouped them into capacity-based triage tiers. This creates a prioritized call list, ensuring intervention resources are directed toward the highest-risk students first.</p>
+<div id="e770ba61" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Isolate the predictor variables for the currently enrolled student cohort.</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>X_live <span class="op">=</span> df_live.drop(columns<span class="op">=</span>[<span class="st">'target'</span>])</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Cast categorical variables to strings to ensure compatibility with the pipeline's encoder.</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> cat_vars:</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    X_live[col] <span class="op">=</span> X_live[col].astype(<span class="bu">str</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the continuous risk probability of dropping out for each active student.</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>df_live[<span class="st">'raw_risk_score'</span>] <span class="op">=</span> final_model.predict_proba(X_live)[:, <span class="dv">1</span>]</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert raw probabilities into percentile ranks to easily compare active students against each other.</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>df_live[<span class="st">'risk_percentile'</span>] <span class="op">=</span> df_live[<span class="st">'raw_risk_score'</span>].rank(pct<span class="op">=</span><span class="va">True</span>) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Define capacity-based triage tiers so academic advisors can prioritize their outreach.</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> assign_percentile_tier(percentile):</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> percentile <span class="op">&gt;=</span> <span class="dv">90</span>:</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Tier 1: Top 10% Risk (Immediate Action)"</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> percentile <span class="op">&gt;=</span> <span class="dv">75</span>:</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Tier 2: Top 25% Risk (Email &amp; Advisor Meeting)"</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> percentile <span class="op">&gt;=</span> <span class="dv">50</span>:</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Tier 3: Above Average Risk (Watchlist)"</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Tier 4: Below Average Risk (Safe)"</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the triage logic to assign a specific intervention tier to every active student.</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>df_live[<span class="st">'intervention_tier'</span>] <span class="op">=</span> df_live[<span class="st">'risk_percentile'</span>].<span class="bu">apply</span>(assign_percentile_tier)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the students from highest to lowest risk to create an actionable call list.</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>report_columns <span class="op">=</span> [<span class="st">'raw_risk_score'</span>, <span class="st">'risk_percentile'</span>, <span class="st">'intervention_tier'</span>]</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>intervention_list <span class="op">=</span> df_live[report_columns].sort_values(by<span class="op">=</span><span class="st">'risk_percentile'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the top 10 most at-risk students for immediate review.</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>display(intervention_list.head(<span class="dv">10</span>).style.set_caption(<span class="st">"TOP 10 AT-RISK STUDENTS (DECEMBER DEPLOYMENT)"</span>).<span class="bu">format</span>({<span class="st">'raw_risk_score'</span>: <span class="st">'</span><span class="sc">{:.4f}</span><span class="st">'</span>, <span class="st">'risk_percentile'</span>: <span class="st">'</span><span class="sc">{:.2f}</span><span class="st">'</span>}).hide(axis<span class="op">=</span><span class="st">'index'</span>))</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Export the final prioritized list for the university's academic advising team.</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>intervention_list.to_csv(<span class="st">'december_intervention_list.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<style type="text/css">
+</style>
+
+<div id="T_090e2" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_090e2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;9: TOP 10 AT-RISK STUDENTS (DECEMBER DEPLOYMENT)
+</figcaption>
+<div aria-describedby="T_090e2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_090e2" class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th id="T_090e2_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">raw_risk_score</th>
+<th id="T_090e2_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">risk_percentile</th>
+<th id="T_090e2_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">intervention_tier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_090e2_row0_col0" class="data row0 col0">0.9995</td>
+<td id="T_090e2_row0_col1" class="data row0 col1">100.00</td>
+<td id="T_090e2_row0_col2" class="data row0 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="even">
+<td id="T_090e2_row1_col0" class="data row1 col0">0.9993</td>
+<td id="T_090e2_row1_col1" class="data row1 col1">99.87</td>
+<td id="T_090e2_row1_col2" class="data row1 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="odd">
+<td id="T_090e2_row2_col0" class="data row2 col0">0.9993</td>
+<td id="T_090e2_row2_col1" class="data row2 col1">99.75</td>
+<td id="T_090e2_row2_col2" class="data row2 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="even">
+<td id="T_090e2_row3_col0" class="data row3 col0">0.9992</td>
+<td id="T_090e2_row3_col1" class="data row3 col1">99.62</td>
+<td id="T_090e2_row3_col2" class="data row3 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="odd">
+<td id="T_090e2_row4_col0" class="data row4 col0">0.9989</td>
+<td id="T_090e2_row4_col1" class="data row4 col1">99.50</td>
+<td id="T_090e2_row4_col2" class="data row4 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="even">
+<td id="T_090e2_row5_col0" class="data row5 col0">0.9989</td>
+<td id="T_090e2_row5_col1" class="data row5 col1">99.37</td>
+<td id="T_090e2_row5_col2" class="data row5 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="odd">
+<td id="T_090e2_row6_col0" class="data row6 col0">0.9989</td>
+<td id="T_090e2_row6_col1" class="data row6 col1">99.24</td>
+<td id="T_090e2_row6_col2" class="data row6 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="even">
+<td id="T_090e2_row7_col0" class="data row7 col0">0.9988</td>
+<td id="T_090e2_row7_col1" class="data row7 col1">99.12</td>
+<td id="T_090e2_row7_col2" class="data row7 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="odd">
+<td id="T_090e2_row8_col0" class="data row8 col0">0.9987</td>
+<td id="T_090e2_row8_col1" class="data row8 col1">98.99</td>
+<td id="T_090e2_row8_col2" class="data row8 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+<tr class="even">
+<td id="T_090e2_row9_col0" class="data row9 col0">0.9986</td>
+<td id="T_090e2_row9_col1" class="data row9 col1">98.87</td>
+<td id="T_090e2_row9_col2" class="data row9 col2">Tier 1: Top 10% Risk (Immediate Action)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="strategic-recommendations-and-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="strategic-recommendations-and-limitations">9. Strategic Recommendations and Limitations</h2>
+<p>I selected LASSO as the final deployment model because interpretability is required for this tool to be adopted. If an algorithm flags a student as high-risk, academic advisors need to know exactly why so they can initiate the right conversation. A black-box model cannot provide that context.</p>
+<p>Based on the top dropout drivers mathematically identified by the model, I recommend three immediate advising strategies for the Tier 1 students: * <strong>Academic Intervention:</strong> Students failing first-semester classes should be automatically enrolled in peer mentorship or early tutoring programs. * <strong>Financial Routing:</strong> Students flagged for unpaid tuition should be proactively routed to financial aid counselors to explore emergency grants or structured payment plans. * <strong>Non-Traditional Student Support:</strong> Older age at enrollment is a major risk factor. The university should evaluate its support systems for working adults, such as offering more evening classes or childcare resources.</p>
+<section id="model-limitations" class="level3">
+<h3 class="anchored" data-anchor-id="model-limitations">Model Limitations</h3>
+<p>This early-warning system has distinct operational and data limitations. First, predicting a multi-year academic outcome using only a single semester of data introduces irreducible error. If a student performs perfectly in their first semester but drops out in their third year due to an unforeseen life event, an early-warning model cannot mathematically predict that outcome. This issue is compounded because the original dataset lacks temporal markers indicating exactly when a student enrolled, graduated, or dropped out. Without knowing if a student left in semester two or semester eight, the model is forced to treat all attrition equally, which slightly dilutes the specific early-warning signals.</p>
+<p>Second, the intervention triage tiers are currently hardcoded to arbitrary percentiles. If a university has 5,000 students and only three advisors, flagging the top 10% (500 students) for immediate action is not practical. Before deployment, these percentile cutoffs must be dynamically adjusted to match the actual budget and headcount capacity of the academic advising department.</p>
+</section>
+<section id="methodological-reflection" class="level3">
+<h3 class="anchored" data-anchor-id="methodological-reflection">Methodological Reflection</h3>
+<p>A close inspection of the macroeconomic variables (inflation, GDP) shows that this dataset blends students from multiple incoming years. This is a major modeling advantage. Training on a single cohort risks overfitting to the anomalies of one specific year. By evaluating a mixed timeframe, the model filters out temporary economic noise and locks onto the timeless, universal indicators of student attrition.</p>
+<p>My core architectural decision was to drop all late-stage academic data. Building a highly accurate model using second-semester or second-year grades is mathematically easy, but it operates like an autopsy report. By strictly constraining the inputs to first-semester performance, this pipeline trades a small percentage of raw accuracy for a five-month operational head start, delivering an actionable business tool rather than just a theoretical academic exercise.</p>
+</section>
+<section id="future-work" class="level3">
+<h3 class="anchored" data-anchor-id="future-work">Future Work</h3>
+<p>If given the opportunity to expand this system, I would integrate behavioral data rather than relying entirely on static demographics and grades. Adding Learning Management System (Canvas) login frequency, campus card swipe data for dining halls and residence halls to measure social engagement, and first-generation college status would allow the model to detect social isolation and disengagement weeks before a student actually fails a test.</p>
+<p>To solve the temporal blind spots identified in my limitations, I would also require exact timestamps recording the specific month and year a student drops out or graduates. This would allow me to build a dynamic time-series model that tracks risk at different stages of a degree. Finally, integrating financial aid dependencies and academic advising attendance records would provide a complete mathematical picture of a student’s institutional support.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
