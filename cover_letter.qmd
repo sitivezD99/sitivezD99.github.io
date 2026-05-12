@@ -3,14 +3,14 @@ title: "Cover Letter"
 ---
 
 <div class="pdf-container">
-  <p>If the PDF does not display, you can <a href="Cover_Letter.pdf">download it here</a>.</p>
+  <p>To save a copy to your computer, <a href="Cover_Letter.pdf" download="Ignacio_Bonmati_Cover_Letter.pdf">click here to download the PDF</a>.</p>
   
   <object 
     data="Cover_Letter.pdf" 
     type="application/pdf" 
     width="100%" 
     height="1000px">
-    <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a href="Cover_Letter.pdf">click here to download the PDF file.</a></p>
+    <p>It appears you don't have a PDF plugin for this browser. <a href="Cover_Letter.pdf" download="Ignacio_Bonmati_Cover_Letter.pdf">Click here to download the PDF file.</a></p>
   </object>
 </div>
 
@@ -21,4 +21,4 @@ title: "Cover Letter"
     padding: 10px;
     background: #f9f9f9;
   }
-</object>
+</style>
