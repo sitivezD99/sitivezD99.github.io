@@ -1,7 +1,19 @@
 ---
-title: "sitivezD99.github.io"
+title: "Data Science Portfolio"
+subtitle: "Ignacio Bonmati Gonzalvez"
 ---
 
-This is a Quarto website.
+Welcome to my data science portfolio. 
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+I am a senior Computer Science major with a strong focus on statistical machine learning, predictive modeling, and data engineering. This website hosts my sample data analysis project and professional application materials.
+
+### Featured Project: Early Warning System for Student Retention
+**[View the full analysis here](analysis.ipynb)**
+
+In this project, I engineered an end-to-end machine learning pipeline to predict higher-education attrition. Rather than treating current enrollment as a static outcome, I isolated historical student data to train a binary classification model (LASSO). I then deployed that model onto the active student cohort to generate an actionable, percentile-based triage list for academic advisors.
+
+### Application Materials
+* **[View Resume](Resume.pdf)**
+* **[View Cover Letter](Cover_Letter.pdf)**
+
+*Contact: i.bonmati.gonzalvez@gmail.com | [GitHub Profile](https://github.com/sitivezD99)*

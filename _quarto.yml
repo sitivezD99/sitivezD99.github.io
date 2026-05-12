@@ -1,22 +1,21 @@
 project:
   type: website
-  output-dir: docs
 
 website:
-  title: "ignaciobg.github.io"
+  title: "Ignacio Bonmati Gonzalvez"
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - href: about.qmd
-        text: About
       - href: analysis.ipynb
-        text: Sample Analysis
+        text: Early Warning System Analysis
+    right:
+      - href: Resume.pdf
+        text: Resume
+      - href: Cover_Letter.pdf
+        text: Cover Letter
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-    css: styles.css
+    theme: cosmo
     toc: true
