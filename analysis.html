@@ -216,6 +216,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In its raw form, the target variable contains three classes: <code>Graduate</code>, <code>Dropout</code>, and <code>Enrolled</code>. <code>Enrolled</code> is not a final outcome; it is a transient state. An enrolled student today could graduate next year, or they could drop out tomorrow. Forcing a machine learning algorithm to find a static mathematical pattern for a temporary state would confuse the model and degrade performance.</p>
 <p>To translate this academic dataset into a practical Early Intervention System, I made two strategic architecture decisions: 1. <strong>Isolating the Historical Truth:</strong> I split the data to isolate students whose outcomes are permanently sealed (<code>Graduate</code> and <code>Dropout</code>). I will train a binary classification model exclusively on this historical cohort to capture the pure mathematical signal of student attrition. 2. <strong>Probability Scoring for Live Deployment:</strong> I will treat the <code>Enrolled</code> cohort as a live deployment set. Instead of predicting a hard “Yes/No”, the model will calculate a Dropout Risk Probability for every currently enrolled student.</p>
 <div id="950253bd" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import necessary libraries for data manipulation, visualization, and machine learning pipelines.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -244,6 +246,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Raw data preview.</span></span>
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>display(df.head().style.set_caption(<span class="ss">f"ORIGINAL DATASET SHAPE: </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> ROWS AND </span><span class="sc">{</span>df<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> COLUMNS"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
 </style>
@@ -510,6 +513,8 @@ Table&nbsp;1: ORIGINAL DATASET SHAPE: 4424 ROWS AND 37 COLUMNS
 <h2 class="anchored" data-anchor-id="justifying-the-early-intervention-architecture">2. Justifying the Early Intervention Architecture</h2>
 <p>Before engineering my features, I need to determine what mathematically drives a student to drop out using the complete dataset (both 1st and 2nd semesters). By running a quick correlation analysis on the full historical cohort, I can see exactly which features are the strongest predictors of student outcomes.</p>
 <div id="86e5c7bb" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize column names to snake_case to prevent referencing errors during analysis.</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> (</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    df.columns</span>
@@ -535,6 +540,7 @@ Table&nbsp;1: ORIGINAL DATASET SHAPE: 4424 ROWS AND 37 COLUMNS
 <span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>display(full_corr.head(<span class="dv">4</span>).to_frame(name<span class="op">=</span><span class="st">'Correlation to Attrition'</span>).style.set_caption(<span class="st">"FULL DATASET: TOP PREDICTORS OF RETENTION"</span>))</span>
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Top dropout predictors.</span></span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>display(full_corr.dropna().tail(<span class="dv">5</span>).head(<span class="dv">4</span>).to_frame(name<span class="op">=</span><span class="st">'Correlation to Attrition'</span>).style.set_caption(<span class="st">"FULL DATASET: TOP PREDICTORS OF DROPPING OUT"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
 </style>
@@ -622,8 +628,15 @@ Table&nbsp;3: FULL DATASET: TOP PREDICTORS OF DROPPING OUT
 <section id="data-engineering-building-the-december-deployment-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="data-engineering-building-the-december-deployment-pipeline">3. Data Engineering: Building the December Deployment Pipeline</h2>
 <p>As proven in the previous step, 2nd-semester academic performance contains the strongest mathematical signals for predicting student attrition. To enforce the mid-year operational constraint, I am dropping those features entirely.</p>
-<p>Because <code>Enrolled</code> is a transient state, I also must isolate the historical ground truth from the active student body. My data engineering pipeline executes three steps: 1. <strong>Drop Late-Stage Features:</strong> Remove all 2nd-semester data. 2. <strong>Isolate Historical Outcomes:</strong> Split the dataset into a historical training cohort (<code>Graduate</code> and <code>Dropout</code>) and a live deployment cohort (<code>Enrolled</code>). 3. <strong>Engineer the Target Variable:</strong> Convert the historical target into a numeric binary classification (1 = <code>Dropout</code>, 0 = <code>Graduate</code>). By assigning <code>Dropout</code> as the positive class, the model is mathematically configured to output a direct “Risk Probability” score.</p>
+<p>Because <code>Enrolled</code> is a transient state, I also must isolate the historical ground truth from the active student body. My data engineering pipeline executes three steps:</p>
+<ol type="1">
+<li><strong>Drop Late-Stage Features:</strong> Remove all 2nd-semester data.</li>
+<li><strong>Isolate Historical Outcomes:</strong> Split the dataset into a historical training cohort (<code>Graduate</code> and <code>Dropout</code>) and a live deployment cohort (<code>Enrolled</code>).</li>
+<li><strong>Engineer the Target Variable:</strong> Convert the historical target into a numeric binary classification (1 = <code>Dropout</code>, 0 = <code>Graduate</code>). By assigning <code>Dropout</code> as the positive class, the model is mathematically configured to output a direct “Risk Probability” score.</li>
+</ol>
 <div id="a23a8712" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove all second-semester data to simulate an early-warning deployment at the end of the first semester.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cols_to_drop <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> df.columns <span class="cf">if</span> <span class="st">'2nd_sem'</span> <span class="kw">in</span> col]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop(columns<span class="op">=</span>cols_to_drop)</span>
@@ -653,6 +666,7 @@ Table&nbsp;3: FULL DATASET: TOP PREDICTORS OF DROPPING OUT
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Total Students'</span>: [df_historical.shape[<span class="dv">0</span>], df_live.shape[<span class="dv">0</span>]]</span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>display(split_info.style.set_caption(<span class="st">"DATASET SPLIT DIMENSIONS"</span>).hide(axis<span class="op">=</span><span class="st">'index'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
 </style>
@@ -766,6 +780,8 @@ Table&nbsp;6: DATASET SPLIT DIMENSIONS
 <h3 class="anchored" data-anchor-id="systematic-outlier-handling">4.2 Systematic Outlier Handling</h3>
 <p>Real-world educational data contains anomalies, such as unusual ages or extreme course loads. Instead of manually inspecting arbitrary features, I programmatically identified all continuous numeric variables and applied the Interquartile Range (IQR) method. Rather than dropping these outliers and losing valuable training data, I capped the extreme upper and lower bounds. This preserves the signal while preventing extreme outliers from distorting the weights of distance-based or linear models.</p>
 <div id="409acfbc" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify all continuous numerical features to prepare for outlier handling.</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>numeric_cols <span class="op">=</span> df_historical.select_dtypes(include<span class="op">=</span>[<span class="st">'int64'</span>, <span class="st">'float64'</span>]).columns.tolist()</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">'target'</span> <span class="kw">in</span> numeric_cols:</span>
@@ -780,12 +796,15 @@ Table&nbsp;6: DATASET SPLIT DIMENSIONS
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    upper_bound <span class="op">=</span> q3 <span class="op">+</span> <span class="fl">1.5</span> <span class="op">*</span> iqr</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    lower_bound <span class="op">=</span> q1 <span class="op">-</span> <span class="fl">1.5</span> <span class="op">*</span> iqr</span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    df_historical[col] <span class="op">=</span> df_historical[col].clip(lower<span class="op">=</span>lower_bound, upper<span class="op">=</span>upper_bound)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="feature-target-correlation-collinearity" class="level3">
 <h3 class="anchored" data-anchor-id="feature-target-correlation-collinearity">4.3 Feature-Target Correlation &amp; Collinearity</h3>
 <p>To determine which features hold the strongest predictive power, I calculated the correlation matrix for all numeric variables against the final outcome. 1. <strong>Collinearity:</strong> The correlation heatmap allows me to identify highly correlated predictors (e.g., first and second-semester performance), warning me of potential multicollinearity issues for linear models. 2. <strong>Predictive Signal:</strong> I extracted the top variables mathematically correlated with the target variable and visualized their distributions. This removes human bias from the EDA and proves exactly which factors most strongly separate graduates from dropouts.</p>
 <div id="19034434" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a correlation matrix to assess relationships between predictive features and the target variable.</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>corr_matrix <span class="op">=</span> df_historical[numeric_cols <span class="op">+</span> [<span class="st">'target'</span>]].corr()</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -820,6 +839,7 @@ Table&nbsp;6: DATASET SPLIT DIMENSIONS
 <span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -843,6 +863,8 @@ Table&nbsp;6: DATASET SPLIT DIMENSIONS
 <p>During the Exploratory Data Analysis, the correlation heatmap warned me of potential multicollinearity among the academic predictor variables. To eliminate visual bias, I ran a programmatic check on the correlation matrix using a strict 0.75 threshold. This revealed a single pair of highly redundant features: <code>curricular_units_1st_sem_approved</code> and <code>curricular_units_1st_sem_grade</code> (Pearson correlation of 0.762). Because these two variables contain effectively the same information, keeping both would destabilize the weights of my linear models. Guided by my EDA boxplots, which proved <code>approved</code> units carry the strongest mathematical signal for retention, I systematically dropped the <code>grade</code> feature.</p>
 <p>To build a professional and leak-proof pipeline, I utilized a Scikit-Learn <code>ColumnTransformer</code>. This ensures that all numerical variables are standardized (<code>StandardScaler</code>) and all categorical variables are mapped into binary matrices (<code>OneHotEncoder</code>) simultaneously, preventing any data from the test set from leaking into the training transformations.</p>
 <div id="49bc8fed" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminate multicollinearity by dropping the redundant feature identified during the programmatic EDA check.</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df_historical <span class="op">=</span> df_historical.drop(columns<span class="op">=</span>[<span class="st">'curricular_units_1st_sem_grade'</span>])</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -875,6 +897,7 @@ Table&nbsp;6: DATASET SPLIT DIMENSIONS
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'num'</span>, StandardScaler(), num_vars),</span>
 <span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>        (<span class="st">'cat'</span>, OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">'ignore'</span>), cat_vars)</span>
 <span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
 </section>
 <section id="predictive-modeling-hyperparameter-tuning" class="level2">
@@ -888,6 +911,8 @@ Table&nbsp;6: DATASET SPLIT DIMENSIONS
 </ol>
 <p>I applied balanced class weights to ensure the algorithms did not ignore the minority class (Dropouts). Finally, I optimized the hyperparameters for all three models using 5-fold Cross-Validation (<code>GridSearchCV</code>). To extract the absolute maximum performance from the 1st-semester data without wasting compute time, the grids below reflect a fine-tuned search centered on the optimal parameters discovered during an initial coarse search.</p>
 <div id="fd9688bf" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Construct the LASSO pipeline and define a fine-tuned grid around the coarse winner (C=0.8).</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lasso_pipe <span class="op">=</span> Pipeline([</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'preprocessor'</span>, preprocessor),</span>
@@ -936,6 +961,7 @@ Table&nbsp;6: DATASET SPLIT DIMENSIONS
 <span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Optimal Parameters'</span>: [<span class="bu">str</span>(lasso_grid.best_params_), <span class="bu">str</span>(rf_grid.best_params_), <span class="bu">str</span>(gb_grid.best_params_)]</span>
 <span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>})</span>
 <span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>display(cv_results.style.set_caption(<span class="st">"FINAL VALIDATION SCORES"</span>).<span class="bu">format</span>({<span class="st">'Best Balanced Accuracy'</span>: <span class="st">'</span><span class="sc">{:.4f}</span><span class="st">'</span>}).hide(axis<span class="op">=</span><span class="st">'index'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Tuning LASSO Logistic Regression...
 Tuning Random Forest Classifier...
@@ -989,6 +1015,8 @@ Table&nbsp;7: FINAL VALIDATION SCORES
 <p>Recall measures the ability to correctly identify students who will eventually drop out. Missing an at-risk student has a high cost. I am willing to accept some false positives (flagging a student who ultimately graduates) because scheduling an unnecessary advising meeting is a low-cost intervention.</p>
 <p>I evaluated each model against the test set to determine which one maximized dropout recall while maintaining a stable balanced accuracy.</p>
 <div id="e9da98c1" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate all tuned models on the unseen test set to compare generalization.</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'LASSO Logistic Regression'</span>: lasso_grid,</span>
@@ -1007,6 +1035,7 @@ Table&nbsp;7: FINAL VALIDATION SCORES
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the performance metrics into a clean table for comparison.</span></span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>results_df <span class="op">=</span> pd.DataFrame(results).sort_values(by<span class="op">=</span><span class="st">'Dropout Recall'</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>display(results_df.style.<span class="bu">format</span>({<span class="st">'Balanced Accuracy'</span>: <span class="st">'</span><span class="sc">{:.4f}</span><span class="st">'</span>, <span class="st">'Dropout Recall'</span>: <span class="st">'</span><span class="sc">{:.4f}</span><span class="st">'</span>}).hide(axis<span class="op">=</span><span class="st">'index'</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
 </style>
@@ -1044,6 +1073,8 @@ Table&nbsp;7: FINAL VALIDATION SCORES
 <p>Gradient Boosting and LASSO achieved nearly identical balanced accuracy scores. LASSO performed significantly better on the primary metric, successfully identifying 84.15% of the actual dropouts in the test set.</p>
 <p>I selected LASSO as the final model for deployment. Because it is a regularized linear model, it provides high interpretability. I extracted the model coefficients to determine which student features carry the most weight. This allows the university to understand exactly what drives student attrition, rather than just receiving a black-box prediction.</p>
 <div id="a63482c0" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Isolate the final LASSO model and its feature names to interpret the results.</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>final_model <span class="op">=</span> lasso_grid.best_estimator_</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>lasso_step <span class="op">=</span> final_model.named_steps[<span class="st">'lasso'</span>]</span>
@@ -1084,6 +1115,7 @@ Table&nbsp;7: FINAL VALIDATION SCORES
 <span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
 <span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
 </style>
@@ -1161,6 +1193,8 @@ Table&nbsp;8: FINAL MODEL: LASSO LOGISTIC REGRESSION
 <p>The final stage of the project transitions the model from testing to deployment. I applied the trained LASSO model to the <code>Enrolled</code> cohort, which consists of students whose final outcomes are not yet determined.</p>
 <p>Instead of generating a simple binary prediction, I configured the model to output a continuous risk probability based strictly on 1st-semester data. To make this actionable for academic advisors with limited time, I converted these raw probabilities into relative percentile ranks and grouped them into capacity-based triage tiers. This creates a prioritized call list, ensuring intervention resources are directed toward the highest-risk students first.</p>
 <div id="e770ba61" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Isolate the predictor variables for the currently enrolled student cohort.</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>X_live <span class="op">=</span> df_live.drop(columns<span class="op">=</span>[<span class="st">'target'</span>])</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1197,6 +1231,7 @@ Table&nbsp;8: FINAL MODEL: LASSO LOGISTIC REGRESSION
 <span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Export the final prioritized list for the university's academic advising team.</span></span>
 <span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>intervention_list.to_csv(<span class="st">'december_intervention_list.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
 </style>
