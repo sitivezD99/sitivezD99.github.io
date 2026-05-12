@@ -14,6 +14,6 @@ In this project, I engineered an end-to-end machine learning pipeline to predict
 
 ### Application Materials
 * **[View Resume](Resume.pdf)**
-* **[View Cover Letter](Cover_Letter.pdf)**
+* **[View Cover Letter](cover_letter.qmd)**
 
 *Contact: i.bonmati.gonzalvez@gmail.com | [GitHub Profile](https://github.com/sitivezD99)*

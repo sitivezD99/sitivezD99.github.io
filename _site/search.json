@@ -7,13 +7,6 @@
     "text": "Welcome to my data science portfolio.\nI am a senior Computer Science major with a strong focus on statistical machine learning, predictive modeling, and data engineering. This website hosts my sample data analysis project and professional application materials.\n\nFeatured Project: Early Warning System for Student Retention\nView the full analysis here\nIn this project, I engineered an end-to-end machine learning pipeline to predict higher-education attrition. Rather than treating current enrollment as a static outcome, I isolated historical student data to train a binary classification model (LASSO). I then deployed that model onto the active student cohort to generate an actionable, percentile-based triage list for academic advisors.\n\n\nApplication Materials\n\nView Resume\nView Cover Letter\n\nContact: i.bonmati.gonzalvez@gmail.com | GitHub Profile"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site"
-  },
-  {
     "objectID": "analysis.html",
     "href": "analysis.html",
     "title": "Building an Early-Warning System for Student Retention",
@@ -82,5 +75,19 @@
     "title": "Building an Early-Warning System for Student Retention",
     "section": "9. Strategic Recommendations and Limitations",
     "text": "9. Strategic Recommendations and Limitations\nI selected LASSO as the final deployment model because interpretability is required for this tool to be adopted. If an algorithm flags a student as high-risk, academic advisors need to know exactly why so they can initiate the right conversation. A black-box model cannot provide that context.\nBased on the top dropout drivers mathematically identified by the model, I recommend three immediate advising strategies for the Tier 1 students: * Academic Intervention: Students failing first-semester classes should be automatically enrolled in peer mentorship or early tutoring programs. * Financial Routing: Students flagged for unpaid tuition should be proactively routed to financial aid counselors to explore emergency grants or structured payment plans. * Non-Traditional Student Support: Older age at enrollment is a major risk factor. The university should evaluate its support systems for working adults, such as offering more evening classes or childcare resources.\n\nModel Limitations\nThis early-warning system has distinct operational and data limitations. First, predicting a multi-year academic outcome using only a single semester of data introduces irreducible error. If a student performs perfectly in their first semester but drops out in their third year due to an unforeseen life event, an early-warning model cannot mathematically predict that outcome. This issue is compounded because the original dataset lacks temporal markers indicating exactly when a student enrolled, graduated, or dropped out. Without knowing if a student left in semester two or semester eight, the model is forced to treat all attrition equally, which slightly dilutes the specific early-warning signals.\nSecond, the intervention triage tiers are currently hardcoded to arbitrary percentiles. If a university has 5,000 students and only three advisors, flagging the top 10% (500 students) for immediate action is not practical. Before deployment, these percentile cutoffs must be dynamically adjusted to match the actual budget and headcount capacity of the academic advising department.\n\n\nMethodological Reflection\nA close inspection of the macroeconomic variables (inflation, GDP) shows that this dataset blends students from multiple incoming years. This is a major modeling advantage. Training on a single cohort risks overfitting to the anomalies of one specific year. By evaluating a mixed timeframe, the model filters out temporary economic noise and locks onto the timeless, universal indicators of student attrition.\nMy core architectural decision was to drop all late-stage academic data. Building a highly accurate model using second-semester or second-year grades is mathematically easy, but it operates like an autopsy report. By strictly constraining the inputs to first-semester performance, this pipeline trades a small percentage of raw accuracy for a five-month operational head start, delivering an actionable business tool rather than just a theoretical academic exercise.\n\n\nFuture Work\nIf given the opportunity to expand this system, I would integrate behavioral data rather than relying entirely on static demographics and grades. Adding Learning Management System (Canvas) login frequency, campus card swipe data for dining halls and residence halls to measure social engagement, and first-generation college status would allow the model to detect social isolation and disengagement weeks before a student actually fails a test.\nTo solve the temporal blind spots identified in my limitations, I would also require exact timestamps recording the specific month and year a student drops out or graduates. This would allow me to build a dynamic time-series model that tracks risk at different stages of a degree. Finally, integrating financial aid dependencies and academic advising attendance records would provide a complete mathematical picture of a student’s institutional support."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "cover_letter.html",
+    "href": "cover_letter.html",
+    "title": "Cover Letter",
+    "section": "",
+    "text": "To view the cover letter in a new tab or download it directly, click here."
   }
 ]

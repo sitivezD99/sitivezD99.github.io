@@ -2,11 +2,23 @@
 title: "Cover Letter"
 ---
 
-To view the cover letter in a new tab or download it directly, [click here](Cover_Letter.pdf).
+<div class="pdf-container">
+  <p>If the PDF does not display, you can <a href="Cover_Letter.pdf">download it here</a>.</p>
+  
+  <object 
+    data="Cover_Letter.pdf" 
+    type="application/pdf" 
+    width="100%" 
+    height="1000px">
+    <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a href="Cover_Letter.pdf">click here to download the PDF file.</a></p>
+  </object>
+</div>
 
-<iframe 
-  src="Cover_Letter.pdf" 
-  width="100%" 
-  height="800px" 
-  style="border: 1px solid #eee;">
-</iframe>
+<style>
+  .pdf-container {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #f9f9f9;
+  }
+</object>
