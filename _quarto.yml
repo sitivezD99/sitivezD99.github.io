@@ -10,7 +10,7 @@ website:
       - href: analysis.ipynb
         text: Early Warning System Analysis
     right:
-      - href: Resume.pdf
+      - href: resume.qmd
         text: Resume
       - href: cover_letter.qmd
         text: Cover Letter
