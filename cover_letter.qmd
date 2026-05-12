@@ -1,0 +1,12 @@
+---
+title: "Cover Letter"
+---
+
+To view the cover letter in a new tab or download it directly, [click here](Cover_Letter.pdf).
+
+<iframe 
+  src="Cover_Letter.pdf" 
+  width="100%" 
+  height="800px" 
+  style="border: 1px solid #eee;">
+</iframe>

@@ -12,7 +12,7 @@ website:
     right:
       - href: Resume.pdf
         text: Resume
-      - href: Cover_Letter.pdf
+      - href: cover_letter.qmd
         text: Cover Letter
 
 format:
