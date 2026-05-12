@@ -8,7 +8,10 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: About
+      - href: analysis.ipynb
+        text: Sample Analysis
 
 format:
   html:
@@ -17,6 +20,3 @@ format:
       - brand
     css: styles.css
     toc: true
-
-
-

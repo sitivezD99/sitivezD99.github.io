@@ -1,0 +1,37 @@
+--- TUNED MULTINOMIAL LASSO ---
+Balanced Accuracy: 0.6676
+              precision    recall  f1-score   support
+
+     Dropout       0.78      0.67      0.72       284
+    Enrolled       0.38      0.57      0.46       159
+    Graduate       0.84      0.76      0.79       442
+
+    accuracy                           0.70       885
+   macro avg       0.67      0.67      0.66       885
+weighted avg       0.74      0.70      0.71       885
+
+
+--- TUNED RANDOM FOREST ---
+Balanced Accuracy: 0.6703
+              precision    recall  f1-score   support
+
+     Dropout       0.76      0.67      0.71       284
+    Enrolled       0.41      0.55      0.47       159
+    Graduate       0.84      0.79      0.81       442
+
+    accuracy                           0.71       885
+   macro avg       0.67      0.67      0.66       885
+weighted avg       0.73      0.71      0.72       885
+
+
+--- TUNED GRADIENT BOOSTING ---
+Balanced Accuracy: 0.6556
+              precision    recall  f1-score   support
+
+     Dropout       0.77      0.70      0.73       284
+    Enrolled       0.45      0.40      0.42       159
+    Graduate       0.79      0.87      0.83       442
+
+    accuracy                           0.73       885
+   macro avg       0.67      0.66      0.66       885
+weighted avg       0.72      0.73      0.73       885
